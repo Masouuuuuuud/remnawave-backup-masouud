@@ -96,7 +96,7 @@ install_dependencies() {
     echo ""
 
     if [[ $EUID -ne 0 ]]; then
-        echo -e "${RED}❌ Ошибка: Этот скрипт требует прав root для установки зависимостей. Пожалуйста, запустите его с '${BOLD}sudo${RESET}' или от пользователя '${BOLD}root${RESET}'.${RESET}"
+        echo -e "${RED}❌ Ошибка: Этот Script требует прав root для установки зависимостей. Пожалуйста, запустите его с '${BOLD}sudo${RESET}' или от пользователя '${BOLD}root${RESET}'.${RESET}"
         exit 1
     fi
 
@@ -276,7 +276,7 @@ load_or_create_config() {
                 exec "$SCRIPT_PATH" "$@"
                 exit 0
             else
-                print_message "ERROR" "Не удалось переместить скрипт в ${BOLD}${SCRIPT_PATH}${RESET}. Проверьте права доступа."
+                print_message "ERROR" "Не удалось переместить Script в ${BOLD}${SCRIPT_PATH}${RESET}. Проверьте права доступа."
                 exit 1
             fi
         else
@@ -1131,39 +1131,39 @@ update_script() {
 
 remove_script() {
     print_message "WARN" "${YELLOW}ВНИМАНИЕ!${RESET} Будут удалены: "
-    echo  " - Скрипт"
-    echo  " - Каталог установки и все бэкапы"
-    echo  " - Символическая ссылка (если существует)"
-    echo  " - Задачи cron"
+    echo  " - Script"
+    echo  " - Installation directory and all backups"
+    echo  " - Symbolic link (if exists)"
+    echo  " - cron tasks"
     echo ""
-    echo -e -n "Вы уверены, что хотите продолжить? Введите ${GREEN}${BOLD}Y${RESET}/${RED}${BOLD}N${RESET}: "
+    echo -e -n "Are you sure you want to continue? Enter ${GREEN}${BOLD}Y${RESET}/${RED}${BOLD}N${RESET}: "
     read -r confirm
     echo ""
     
     if [[ "${confirm,,}" != "y" ]]; then
-    print_message "WARN" "Удаление отменено."
+    print_message "WARN" "Deletion cancelled.."
     read -rp "Press Enter to continue..."
     return
     fi
 
     if [[ "$EUID" -ne 0 ]]; then
-        print_message "WARN" "Для полного удаления требуются права root. Пожалуйста, запустите с ${BOLD}sudo${RESET}."
+        print_message "WARN" "Root privileges are required for complete removal. Please run с ${BOLD}sudo${RESET}."
         read -rp "Press Enter to continue..."
         return
     fi
 
-    print_message "INFO" "Удаление cron-задач..."
+    print_message "INFO" "Deleting cron jobs..."
     if crontab -l 2>/dev/null | grep -qF "$SCRIPT_PATH backup"; then
         (crontab -l 2>/dev/null | grep -vF "$SCRIPT_PATH backup") | crontab -
-        print_message "SUCCESS" "Задачи cron для автоматического бэкапа удалены."
+        print_message "SUCCESS" "Cron jobs for automatic backups have been removed."
     else
-        print_message "INFO" "Задачи cron для автоматического бэкапа не найдены."
+        print_message "INFO" "No cron jobs found for automatic backup."
     fi
     echo ""
 
-    print_message "INFO" "Удаление символической ссылки..."
+    print_message "INFO" "Removing a symbolic link..."
     if [[ -L "$SYMLINK_PATH" ]]; then
-        rm -f "$SYMLINK_PATH" && print_message "SUCCESS" "Символическая ссылка ${BOLD}${SYMLINK_PATH}${RESET} удалена." || print_message "WARN" "Не удалось удалить символическую ссылку ${BOLD}${SYMLINK_PATH}${RESET}. Возможно, потребуется ручное удаление."
+        rm -f "$SYMLINK_PATH" && print_message "SUCCESS" "Symbolic link ${BOLD}${SYMLINK_PATH}${RESET} удалена." || print_message "WARN" "Не удалось удалить символическую ссылку ${BOLD}${SYMLINK_PATH}${RESET}. Возможно, потребуется ручное удаление."
     elif [[ -e "$SYMLINK_PATH" ]]; then
         print_message "WARN" "${BOLD}${SYMLINK_PATH}${RESET} существует, но не является символической ссылкой. Рекомендуется проверить и удалить вручную."
     else
