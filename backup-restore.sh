@@ -673,7 +673,7 @@ setup_auto_send() {
         echo ""
         echo "   0. Return to main menu"
         echo ""
-        read -rp "${GREEN}[?]${RESET} Выберите пункт: " choice
+        read -rp "${GREEN}[?]${RESET} Select an item: " choice
         echo ""
         case $choice in
             1)
@@ -1192,7 +1192,7 @@ configure_upload_method() {
         echo ""
         echo "   0. Вернуться в главное меню"
         echo ""
-        read -rp "${GREEN}[?]${RESET} Выберите пункт: " choice
+        read -rp "${GREEN}[?]${RESET} Select an item: " choice
         echo ""
 
         case $choice in
@@ -1299,7 +1299,7 @@ configure_settings() {
         echo ""
         echo "   0. Return to main menu"
         echo ""
-        read -rp "${GREEN}[?]${RESET} Выберите пункт: " choice
+        read -rp "${GREEN}[?]${RESET} Select an item: " choice
         echo ""
 
         case $choice in
@@ -1318,7 +1318,7 @@ configure_settings() {
                     echo ""
                     echo "   0. Назад"
                     echo ""
-                    read -rp "${GREEN}[?]${RESET} Выберите пункт: " telegram_choice
+                    read -rp "${GREEN}[?]${RESET} Select an item: " telegram_choice
                     echo ""
 
                     case $telegram_choice in
@@ -1370,7 +1370,7 @@ configure_settings() {
                     echo ""
                     echo "   0. Назад"
                     echo ""
-                    read -rp "${GREEN}[?]${RESET} Выберите пункт: " gd_choice
+                    read -rp "${GREEN}[?]${RESET} Select an item: " gd_choice
                     echo ""
 
                     case $gd_choice in
@@ -1568,7 +1568,7 @@ main_menu() {
         echo -e "   —  Quick start: ${BOLD}${GREEN}rw-backup${RESET} accessible from anywhere in the system"
         echo ""
 
-        read -rp "${GREEN}[?]${RESET} Выберите пункт: " choice
+        read -rp "${GREEN}[?]${RESET} Select an item: " choice
         echo ""
         case $choice in
             1) create_backup ; read -rp "Press Enter to continue..." ;;
