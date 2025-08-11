@@ -944,7 +944,7 @@ restore_backup() {
     print_message "INFO" "Запуск контейнера с базой данных, ожидайте..."
     docker compose rm -f remnawave-db > /dev/null 2>&1
     docker compose up -d remnawave-db
-    print_message "INFO" "Ожидание готовности базы данных..."
+    print_message "INFO" "Waiting for database to be ready..."
     until [ "$(docker inspect --format='{{.State.Health.Status}}' remnawave-db)" == "healthy" ]; do
         sleep 2
         echo -n "."
