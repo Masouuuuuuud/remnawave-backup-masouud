@@ -151,23 +151,23 @@ load_or_create_config() {
 
         if [[ -z "$BOT_TOKEN" || -z "$CHAT_ID" ]]; then
             print_message "WARN" "В файле конфигурации отсутствуют необходимые переменные для Telegram."
-            print_message "ACTION" "Пожалуйста, введите недостающие данные для Telegram (обязательно):"
+            print_message "ACTION" "Пожалуйста, Enter недостающие данные для Telegram (обязательно):"
             echo ""
             print_message "INFO" "Создайте Telegram бота в ${CYAN}@BotFather${RESET} и получите API Token"
-            [[ -z "$BOT_TOKEN" ]] && read -rp "    Введите API Token: " BOT_TOKEN
+            [[ -z "$BOT_TOKEN" ]] && read -rp "    Enter API Token: " BOT_TOKEN
             echo ""
-            print_message "INFO" "Введите Chat ID (для отправки в группу) или свой Telegram ID (для прямой отправки в бота)"
+            print_message "INFO" "Enter Chat ID (для отправки в группу) или свой Telegram ID (для прямой отправки в бота)"
             echo -e "       Chat ID/Telegram ID можно узнать у этого бота ${CYAN}@username_to_id_bot${RESET}"
-            [[ -z "$CHAT_ID" ]] && read -rp "    Введите ID: " CHAT_ID
+            [[ -z "$CHAT_ID" ]] && read -rp "    Enter ID: " CHAT_ID
             echo ""
-            print_message "INFO" "Опционально: для отправки в определенный топик группы, введите ID топика (Message Thread ID)"
+            print_message "INFO" "Опционально: для отправки в определенный топик группы, Enter ID топика (Message Thread ID)"
             echo -e "       Оставьте пустым для общего потока или отправки напрямую в бота"
-            read -rp "    Введите Message Thread ID: " TG_MESSAGE_THREAD_ID
+            read -rp "    Enter Message Thread ID: " TG_MESSAGE_THREAD_ID
             echo ""
             config_updated=true
         fi
 
-        [[ -z "$DB_USER" ]] && read -rp "    Введите имя пользователя вашей БД (по умолчанию postgres): " DB_USER
+        [[ -z "$DB_USER" ]] && read -rp "    Enter имя пользователя вашей БД (по умолчанию postgres): " DB_USER
         DB_USER=${DB_USER:-postgres}
         config_updated=true
         echo ""
@@ -204,14 +204,14 @@ load_or_create_config() {
 
         if [[ "$UPLOAD_METHOD" == "google_drive" && ( -z "$GD_CLIENT_ID" || -z "$GD_CLIENT_SECRET" || -z "$GD_REFRESH_TOKEN" ) ]]; then
             print_message "WARN" "В файле конфигурации отсутствуют необходимые переменные для Google Drive."
-            print_message "ACTION" "Пожалуйста, введите недостающие данные для Google Drive:"
+            print_message "ACTION" "Пожалуйста, Enter недостающие данные для Google Drive:"
             echo ""
             echo "Если у вас нет Client ID и Client Secret токенов"
             local guide_url="https://telegra.ph/Nastrojka-Google-API-06-02"
                 print_message "LINK" "Изучите этот гайд: ${CYAN}${guide_url}${RESET}"
                 echo ""
-            [[ -z "$GD_CLIENT_ID" ]] && read -rp "    Введите Google Client ID: " GD_CLIENT_ID
-            [[ -z "$GD_CLIENT_SECRET" ]] && read -rp "    Введите Google Client Secret: " GD_CLIENT_SECRET
+            [[ -z "$GD_CLIENT_ID" ]] && read -rp "    Enter Google Client ID: " GD_CLIENT_ID
+            [[ -z "$GD_CLIENT_SECRET" ]] && read -rp "    Enter Google Client Secret: " GD_CLIENT_SECRET
             clear
             
             if [[ -z "$GD_REFRESH_TOKEN" ]]; then
@@ -221,7 +221,7 @@ load_or_create_config() {
                 local auth_url="https://accounts.google.com/o/oauth2/auth?client_id=${GD_CLIENT_ID}&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code&access_type=offline"
                 print_message "INFO" "${CYAN}${auth_url}${RESET}"
                 echo ""
-                read -rp "    Введите код из браузера: " AUTH_CODE
+                read -rp "    Enter код из браузера: " AUTH_CODE
                 
                 print_message "INFO" "Получение Refresh Token..."
                 local token_response=$(curl -s -X POST https://oauth2.googleapis.com/token \
@@ -283,17 +283,17 @@ load_or_create_config() {
             print_message "INFO" "Конфигурация не найдена, создаем новую..."
             echo ""
             print_message "INFO" "Создайте Telegram бота в ${CYAN}@BotFather${RESET} и получите API Token"
-            read -rp "    Введите API Token: " BOT_TOKEN
+            read -rp "    Enter API Token: " BOT_TOKEN
             echo ""
-            print_message "INFO" "Введите Chat ID (для отправки в группу) или свой Telegram ID (для прямой отправки в бота)"
+            print_message "INFO" "Enter Chat ID (для отправки в группу) или свой Telegram ID (для прямой отправки в бота)"
             echo -e "       Chat ID/Telegram ID можно узнать у этого бота ${CYAN}@username_to_id_bot${RESET}"
-            read -rp "    Введите ID: " CHAT_ID
+            read -rp "    Enter ID: " CHAT_ID
             echo ""
-            print_message "INFO" "Опционально: для отправки в определенный топик группы, введите ID топика (Message Thread ID)"
+            print_message "INFO" "Опционально: для отправки в определенный топик группы, Enter ID топика (Message Thread ID)"
             echo -e "       Оставьте пустым для общего потока или отправки напрямую в бота"
-            read -rp "    Введите Message Thread ID: " TG_MESSAGE_THREAD_ID
+            read -rp "    Enter Message Thread ID: " TG_MESSAGE_THREAD_ID
             echo ""
-            read -rp "    Введите PostgreSQL username (по умолчанию postgres): " DB_USER
+            read -rp "    Enter PostgreSQL username (по умолчанию postgres): " DB_USER
             DB_USER=${DB_USER:-postgres}
             echo ""
 
@@ -687,7 +687,7 @@ setup_auto_send() {
                     server_offset_total_minutes=$(( -server_offset_total_minutes ))
                 fi
 
-                echo "Введите желаемое время отправки по UTC+0 (например, 08:00)"
+                echo "Enter желаемое время отправки по UTC+0 (например, 08:00)"
                 read -rp "Вы можете указать несколько времен через пробел: " times
                 
                 valid_times_cron=()
@@ -831,7 +831,7 @@ restore_backup() {
     local selected_index
 
     while true; do
-        read -rp "${GREEN}[?]${RESET} Введите номер файла для восстановления (0 для выхода): " user_choice
+        read -rp "${GREEN}[?]${RESET} Enter номер файла для восстановления (0 для выхода): " user_choice
         
         if [[ "$user_choice" == "0" ]]; then
             print_message "INFO" "Восстановление отменено пользователем."
@@ -840,7 +840,7 @@ restore_backup() {
         fi
 
         if ! [[ "$user_choice" =~ ^[0-9]+$ ]]; then
-            print_message "ERROR" "Неверный ввод. Пожалуйста, введите номер."
+            print_message "ERROR" "Неверный ввод. Пожалуйста, Enter номер."
             continue
         fi
 
@@ -855,9 +855,9 @@ restore_backup() {
     done
 
     echo ""
-    print_message "WARN" "Операция восстановления полностью перезапишет текущую БД"
-    print_message "INFO" "В конфигурации скрипта вы указали имя пользователя БД: ${BOLD}${GREEN}${DB_USER}${RESET}"
-    read -rp "$(echo -e "${GREEN}[?]${RESET} Введите ${GREEN}${BOLD}Y${RESET}/${RED}${BOLD}N${RESET} для продолжения: ")" db_user_confirm
+    print_message "WARN" "The restore operation will completely overwrite the current database."
+    print_message "INFO" "In the script configuration you specified the DB user name: ${BOLD}${GREEN}${DB_USER}${RESET}"
+    read -rp "$(echo -e "${GREEN}[?]${RESET} Enter ${GREEN}${BOLD}Y${RESET}/${RED}${BOLD}N${RESET} to continue: ")" db_user_confirm
     if [[ "$db_user_confirm" != "y" ]]; then
         print_message "INFO" "Операция восстановления отменена пользователем."
         read -rp "Нажмите Enter для возврата в меню..."
@@ -868,7 +868,7 @@ restore_backup() {
     print_message "INFO" "Начало процесса полного сброса и восстановления базы данных..."
     echo ""
 
-    print_message "INFO" "Остановка контейнеров и удаление тома базы данных..."
+    print_message "INFO" "Stopping containers and deleting database volume..."
     if ! cd "$REMNALABS_ROOT_DIR"; then
         print_message "ERROR" "Ошибка: Не удалось перейти в каталог ${BOLD}${REMNALABS_ROOT_DIR}${RESET}. Убедитесь, что файл ${BOLD}docker-compose.yml${RESET} находится там."
         read -rp "Нажмите Enter для возврата в меню..."
@@ -993,7 +993,7 @@ restore_backup() {
     docker compose up -d
     echo ""
 
-    print_message "SUCCESS" "Восстановление завершено. Все контейнеры запущены."
+    print_message "SUCCESS" "Restore complete. All containers running.."
 
     REMNAWAVE_VERSION=$(get_remnawave_version)
     local restore_msg=$'💾 #restore_success\n➖➖➖➖➖➖➖➖➖\n✅ *Восстановление БД завершено*\n🌊 *Remnawave:* '"${REMNAWAVE_VERSION}"
@@ -1067,7 +1067,7 @@ update_script() {
 
     if compare_versions "$VERSION" "$REMOTE_VERSION"; then
         print_message "ACTION" "Доступно обновление до версии ${BOLD}${REMOTE_VERSION}${RESET}."
-        echo -e -n "Хотите обновить скрипт? Введите ${GREEN}${BOLD}Y${RESET}/${RED}${BOLD}N${RESET}: "
+        echo -e -n "Хотите обновить скрипт? Enter ${GREEN}${BOLD}Y${RESET}/${RED}${BOLD}N${RESET}: "
         read -r confirm_update
         echo ""
 
@@ -1201,13 +1201,13 @@ configure_upload_method() {
                 save_config
                 print_message "SUCCESS" "Способ отправки установлен на ${BOLD}Telegram${RESET}."
                 if [[ -z "$BOT_TOKEN" || -z "$CHAT_ID" ]]; then
-                    print_message "ACTION" "Пожалуйста, введите данные для Telegram:"
+                    print_message "ACTION" "Пожалуйста, Enter данные для Telegram:"
                     echo ""
                     print_message "INFO" "Создайте Telegram бота в ${CYAN}@BotFather${RESET} и получите API Token"
-                    read -rp "   Введите API Token: " BOT_TOKEN
+                    read -rp "   Enter API Token: " BOT_TOKEN
                     echo ""
                     print_message "INFO" "Свой ID можно узнать у этого бота в Telegram ${CYAN}@userinfobot${RESET}"
-                    read -rp "   Введите свой Telegram ID: " CHAT_ID
+                    read -rp "   Enter свой Telegram ID: " CHAT_ID
                     save_config
                     print_message "SUCCESS" "Settings Telegram сохранены."
                 fi
@@ -1219,13 +1219,13 @@ configure_upload_method() {
                 local gd_setup_successful=true
 
                 if [[ -z "$GD_CLIENT_ID" || -z "$GD_CLIENT_SECRET" || -z "$GD_REFRESH_TOKEN" ]]; then
-                    print_message "ACTION" "Пожалуйста, введите данные для Google Drive API."
+                    print_message "ACTION" "Пожалуйста, Enter данные для Google Drive API."
                     echo ""
                     echo "Если у вас нет Client ID и Client Secret токенов"
                     local guide_url="https://telegra.ph/Nastrojka-Google-API-06-02"
                     print_message "LINK" "Изучите этот гайд: ${CYAN}${guide_url}${RESET}"
-                    read -rp "   Введите Google Client ID: " GD_CLIENT_ID
-                    read -rp "   Введите Google Client Secret: " GD_CLIENT_SECRET
+                    read -rp "   Enter Google Client ID: " GD_CLIENT_ID
+                    read -rp "   Enter Google Client Secret: " GD_CLIENT_SECRET
                     
                     clear
                     
@@ -1235,7 +1235,7 @@ configure_upload_method() {
                     local auth_url="https://accounts.google.com/o/oauth2/auth?client_id=${GD_CLIENT_ID}&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code&access_type=offline"
                     print_message "INFO" "${CYAN}${auth_url}${RESET}"
                     echo ""
-                    read -rp "Введите код из браузера: " AUTH_CODE
+                    read -rp "Enter код из браузера: " AUTH_CODE
                     
                     print_message "INFO" "Получение Refresh Token..."
                     local token_response=$(curl -s -X POST https://oauth2.googleapis.com/token \
@@ -1266,7 +1266,7 @@ configure_upload_method() {
                         echo "   4. Если оставить поле пустым — бекап будет отправлен в корневую папку Google Drive."
                         echo
 
-                        read -rp "   Введите Google Drive Folder ID (оставьте пустым для корневой папки): " GD_FOLDER_ID
+                        read -rp "   Enter Google Drive Folder ID (оставьте пустым для корневой папки): " GD_FOLDER_ID
                     fi
                 fi
 
@@ -1324,23 +1324,23 @@ configure_settings() {
                     case $telegram_choice in
                         1)
                             print_message "INFO" "Создайте Telegram бота в ${CYAN}@BotFather${RESET} и получите API Token"
-                            read -rp "   Введите новый API Token: " NEW_BOT_TOKEN
+                            read -rp "   Enter новый API Token: " NEW_BOT_TOKEN
                             BOT_TOKEN="$NEW_BOT_TOKEN"
                             save_config
                             print_message "SUCCESS" "API Token успешно обновлен."
                             ;;
                         2)
-                            print_message "INFO" "Введите Chat ID (для отправки в группу) или свой Telegram ID (для прямой отправки в бота)"
+                            print_message "INFO" "Enter Chat ID (для отправки в группу) или свой Telegram ID (для прямой отправки в бота)"
             echo -e "       Chat ID/Telegram ID можно узнать у этого бота ${CYAN}@username_to_id_bot${RESET}"
-                            read -rp "   Введите новый ID: " NEW_CHAT_ID
+                            read -rp "   Enter новый ID: " NEW_CHAT_ID
                             CHAT_ID="$NEW_CHAT_ID"
                             save_config
                             print_message "SUCCESS" "ID успешно обновлен."
                             ;;
                         3)
-                            print_message "INFO" "Опционально: для отправки в определенный топик группы, введите ID топика (Message Thread ID)"
+                            print_message "INFO" "Опционально: для отправки в определенный топик группы, Enter ID топика (Message Thread ID)"
             echo -e "       Оставьте пустым для общего потока или отправки напрямую в бота"
-                            read -rp "   Введите Message Thread ID: " NEW_TG_MESSAGE_THREAD_ID
+                            read -rp "   Enter Message Thread ID: " NEW_TG_MESSAGE_THREAD_ID
                             TG_MESSAGE_THREAD_ID="$NEW_TG_MESSAGE_THREAD_ID"
                             save_config
                             print_message "SUCCESS" "Message Thread ID успешно обновлен."
@@ -1378,7 +1378,7 @@ configure_settings() {
                             echo "Если у вас нет Client ID и Client Secret токенов"
                             local guide_url="https://telegra.ph/Nastrojka-Google-API-06-02"
                             print_message "LINK" "Изучите этот гайд: ${CYAN}${guide_url}${RESET}"
-                            read -rp "   Введите новый Google Client ID: " NEW_GD_CLIENT_ID
+                            read -rp "   Enter новый Google Client ID: " NEW_GD_CLIENT_ID
                             GD_CLIENT_ID="$NEW_GD_CLIENT_ID"
                             save_config
                             print_message "SUCCESS" "Google Client ID успешно обновлен."
@@ -1387,7 +1387,7 @@ configure_settings() {
                             echo "Если у вас нет Client ID и Client Secret токенов"
                             local guide_url="https://telegra.ph/Nastrojka-Google-API-06-02"
                             print_message "LINK" "Изучите этот гайд: ${CYAN}${guide_url}${RESET}"
-                            read -rp "   Введите новый Google Client Secret: " NEW_GD_CLIENT_SECRET
+                            read -rp "   Enter новый Google Client Secret: " NEW_GD_CLIENT_SECRET
                             GD_CLIENT_SECRET="$NEW_GD_CLIENT_SECRET"
                             save_config
                             print_message "SUCCESS" "Google Client Secret успешно обновлен."
@@ -1400,7 +1400,7 @@ configure_settings() {
                             local auth_url="https://accounts.google.com/o/oauth2/auth?client_id=${GD_CLIENT_ID}&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code&access_type=offline"
                             print_message "LINK" "${CYAN}${auth_url}${RESET}"
                             echo ""
-                            read -rp "Введите код из браузера: " AUTH_CODE
+                            read -rp "Enter код из браузера: " AUTH_CODE
                             
                             print_message "INFO" "Получение Refresh Token..."
                             local token_response=$(curl -s -X POST https://oauth2.googleapis.com/token \
@@ -1430,7 +1430,7 @@ configure_settings() {
                             echo "   3. Скопируйте часть после /folders/ — это и есть Folder ID:"
                             echo "   4. Если оставить поле пустым — бекап будет отправлен в корневую папку Google Drive."
                             echo
-                            read -rp "   Введите новый Google Drive Folder ID (оставьте пустым для корневой папки): " NEW_GD_FOLDER_ID
+                            read -rp "   Enter новый Google Drive Folder ID (оставьте пустым для корневой папки): " NEW_GD_FOLDER_ID
                             GD_FOLDER_ID="$NEW_GD_FOLDER_ID"
                             save_config
                             print_message "SUCCESS" "Google Drive Folder ID успешно обновлен."
@@ -1448,7 +1448,7 @@ configure_settings() {
                 echo ""
                 print_message "INFO" "Current PostgreSQL username: ${BOLD}${DB_USER}${RESET}"
                 echo ""
-                read -rp "   Введите новое PostgreSQL username (по умолчанию postgres): " NEW_DB_USER
+                read -rp "   Enter новое PostgreSQL username (по умолчанию postgres): " NEW_DB_USER
                 DB_USER="${NEW_DB_USER:-postgres}"
                 save_config
                 print_message "SUCCESS" "PostgreSQL username успешно обновлено на ${BOLD}${DB_USER}${RESET}."
