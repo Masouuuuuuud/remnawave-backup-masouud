@@ -502,7 +502,7 @@ send_google_drive_document() {
 }
 
 create_backup() {
-    print_message "INFO" "Начинаю процесс создания резервной копии..."
+    print_message "INFO" "I am starting the backup process...."
     echo ""
 
     REMNAWAVE_VERSION=$(get_remnawave_version)
@@ -524,7 +524,7 @@ create_backup() {
         fi
         exit 1
     fi
-    print_message "INFO" "Создание PostgreSQL дампа и сжатие в файл..."
+    print_message "INFO" "Create PostgreSQL dump and compress to file..."
     if ! docker exec -t "remnawave-db" pg_dumpall -c -U "$DB_USER" | gzip -9 > "$BACKUP_DIR/$BACKUP_FILE_DB"; then
         STATUS=$?
         echo -e "${RED}❌ Ошибка при создании дампа PostgreSQL. Код выхода: ${BOLD}$STATUS${RESET}. Проверьте имя пользователя БД и доступ к контейнеру.${RESET}"
@@ -536,14 +536,14 @@ create_backup() {
         fi
         exit $STATUS
     fi
-    print_message "SUCCESS" "Дамп PostgreSQL успешно создан."
+    print_message "SUCCESS" "PostgreSQL dump successfully created."
     echo ""
-    print_message "INFO" "Архивирование бэкапа в файл..."
+    print_message "INFO" "Archiving a backup to a file..."
     
     FILES_TO_ARCHIVE=("$BACKUP_FILE_DB")
     
     if [ -f "$ENV_NODE_PATH" ]; then
-        print_message "INFO" "Обнаружен файл ${BOLD}${ENV_NODE_FILE}${RESET}. Добавляем его в архив."
+        print_message "INFO" "File found ${BOLD}${ENV_NODE_FILE}${RESET}. Add it to the archive."
         cp "$ENV_NODE_PATH" "$BACKUP_DIR/" || { 
             echo -e "${RED}❌ Ошибка при копировании ${BOLD}${ENV_NODE_FILE}${RESET} для бэкапа.${RESET}"; 
             local error_msg="❌ Ошибка: Не удалось скопировать ${BOLD}${ENV_NODE_FILE}${RESET} для бэкапа."
@@ -556,7 +556,7 @@ create_backup() {
     fi
 
     if [ -f "$ENV_PATH" ]; then
-        print_message "INFO" "Обнаружен файл ${BOLD}${ENV_FILE}${RESET}. Добавляем его в архив."
+        print_message "INFO" "File found ${BOLD}${ENV_FILE}${RESET}. Add it to the archive."
         cp "$ENV_PATH" "$BACKUP_DIR/" || { 
             echo -e "${RED}❌ Ошибка при копировании ${BOLD}${ENV_FILE}${RESET} для бэкапа.${RESET}"; 
             local error_msg="❌ Ошибка: Не удалось скопировать ${BOLD}${ENV_FILE}${RESET} для бэкапа."
@@ -580,14 +580,14 @@ create_backup() {
         fi
         exit $STATUS
     fi
-    print_message "SUCCESS" "Архив бэкапа успешно создан: ${BOLD}${BACKUP_DIR}/${BACKUP_FILE_FINAL}${RESET}"
+    print_message "SUCCESS" "The backup archive was successfully created.: ${BOLD}${BACKUP_DIR}/${BACKUP_FILE_FINAL}${RESET}"
     echo ""
 
-    print_message "INFO" "Очистка промежуточных файлов бэкапа..."
+    print_message "INFO" "Cleaning up intermediate backup files..."
     rm -f "$BACKUP_DIR/$BACKUP_FILE_DB"
     rm -f "$BACKUP_DIR/$ENV_NODE_FILE"
     rm -f "$BACKUP_DIR/$ENV_FILE"
-    print_message "SUCCESS" "Промежуточные файлы удалены."
+    print_message "SUCCESS" "Intermediate files removed."
     echo ""
 
     print_message "INFO" "Отправка бэкапа (${UPLOAD_METHOD})..."
@@ -597,13 +597,13 @@ create_backup() {
     if [[ -f "$BACKUP_DIR/$BACKUP_FILE_FINAL" ]]; then
         if [[ "$UPLOAD_METHOD" == "telegram" ]]; then
             if send_telegram_document "$BACKUP_DIR/$BACKUP_FILE_FINAL" "$caption_text"; then
-                print_message "SUCCESS" "Бэкап успешно отправлен в Telegram."
+                print_message "SUCCESS" "The backup has been successfully sent to Telegram."
             else
                 echo -e "${RED}❌ Ошибка при отправке бэкапа в Telegram. Проверьте Settings Telegram API (токен, ID чата).${RESET}"
             fi
         elif [[ "$UPLOAD_METHOD" == "google_drive" ]]; then
             if send_google_drive_document "$BACKUP_DIR/$BACKUP_FILE_FINAL"; then
-                print_message "SUCCESS" "Бэкап успешно отправлен в Google Drive."
+                print_message "SUCCESS" "The backup has been successfully sent to Google Drive."
                 local tg_success_message=$'💾 #backup_success\n➖➖➖➖➖➖➖➖➖\n✅ *Бэкап успешно создан и отправлен в Google Drive*\n🌊 *Remnawave:* '"${REMNAWAVE_VERSION}"$'\n📅 *Дата:* '"${DATE}"
                 if send_telegram_message "$tg_success_message"; then
                     print_message "SUCCESS" "Уведомление об успешной отправке на Google Drive отправлено в Telegram."
@@ -630,9 +630,9 @@ create_backup() {
     fi
     echo ""
 
-    print_message "INFO" "Применение политики хранения бэкапов (оставляем за последние ${BOLD}${RETAIN_BACKUPS_DAYS}${RESET} дней)..."
+    print_message "INFO" "Applying a backup retention policy (оставляем за последние ${BOLD}${RETAIN_BACKUPS_DAYS}${RESET} дней)..."
     find "$BACKUP_DIR" -maxdepth 1 -name "remnawave_backup_*.tar.gz" -mtime +$RETAIN_BACKUPS_DAYS -delete
-    print_message "SUCCESS" "Политика хранения применена. Старые бэкапы удалены."
+    print_message "SUCCESS" "Retention policy applied. Old backups deleted.."
     echo ""
     
     {
@@ -909,7 +909,7 @@ restore_backup() {
     echo ""
 
     if [ -f "$temp_restore_dir/$ENV_NODE_FILE" ]; then
-        print_message "INFO" "Обнаружен файл ${BOLD}${ENV_NODE_FILE}${RESET}. Перемещаем его в ${BOLD}${ENV_NODE_RESTORE_PATH}${RESET}."
+        print_message "INFO" "File found ${BOLD}${ENV_NODE_FILE}${RESET}. Перемещаем его в ${BOLD}${ENV_NODE_RESTORE_PATH}${RESET}."
         mv "$temp_restore_dir/$ENV_NODE_FILE" "$ENV_NODE_RESTORE_PATH" || {
             echo -e "${RED}❌ Ошибка при перемещении ${BOLD}${ENV_NODE_FILE}${RESET}.${RESET}"
             if [[ "$UPLOAD_METHOD" == "telegram" ]]; then
@@ -925,7 +925,7 @@ restore_backup() {
     fi
 
     if [ -f "$temp_restore_dir/$ENV_FILE" ]; then
-        print_message "INFO" "Обнаружен файл ${BOLD}${ENV_FILE}${RESET}. Перемещаем его в ${BOLD}${ENV_RESTORE_PATH}${RESET}."
+        print_message "INFO" "File found ${BOLD}${ENV_FILE}${RESET}. Перемещаем его в ${BOLD}${ENV_RESTORE_PATH}${RESET}."
         mv "$temp_restore_dir/$ENV_FILE" "$ENV_RESTORE_PATH" || {
             echo -e "${RED}❌ Ошибка при перемещении ${BOLD}${ENV_FILE}${RESET}.${RESET}"
             if [[ "$UPLOAD_METHOD" == "telegram" ]]; then
