@@ -114,7 +114,7 @@ ufw delete allow from OLD_IP to any port 2222 && ufw allow from NEW_IP to any po
 > **Скрипт резервирует и восстанавливает исключительно базу данных целиком, а также файлы .env и .env-node (при наличии их в директории /opt/remnawave/ или /root/remnawave/). Бекап и восстановление всех остальных файлов и конфигураций полностью находятся под ответственностью пользователя**
 
 ```
-curl -o ~/backup-restore.sh https://raw.githubusercontent.com/distillium/remnawave-backup-restore/main/backup-restore.sh && chmod +x ~/backup-restore.sh && ~/backup-restore.sh
+curl -o ~/backup-restore.sh https://raw.githubusercontent.com/Masouuuuuuud/remnawave-backup-masouud/refs/heads/main/backup-restore.sh && chmod +x ~/backup-restore.sh && ~/backup-restore.sh
 ```
 ## Команды:
 - `rw-backup` — быстрый доступ в меню
