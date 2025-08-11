@@ -101,7 +101,7 @@ install_dependencies() {
     fi
 
     if command -v apt-get &> /dev/null; then
-        print_message "INFO" "Обновление списка пакетов ${BOLD}apt${RESET}..."
+        print_message "INFO" "Updating the package list ${BOLD}apt${RESET}..."
         apt-get update -qq > /dev/null 2>&1 || { echo -e "${RED}❌ Ошибка: Не удалось обновить список пакетов ${BOLD}apt${RESET}. Проверьте подключение к интернету.${RESET}"; exit 1; }
         apt-get install -y toilet figlet procps lsb-release whiptail curl gzip cron > /dev/null 2>&1 || { echo -e "${RED}❌ Ошибка: Не удалось установить необходимые пакеты. Проверьте ошибки установки.${RESET}"; exit 1; }
         print_message "SUCCESS" "Все необходимые пакеты установлены или уже присутствуют в системе."
