@@ -590,7 +590,7 @@ create_backup() {
     print_message "SUCCESS" "Intermediate files removed."
     echo ""
 
-    print_message "INFO" "Отправка бэкапа (${UPLOAD_METHOD})..."
+    print_message "INFO" "Sending a backup (${UPLOAD_METHOD})..."
     local DATE=$(date +'%Y-%m-%d %H:%M:%S')
     local caption_text=$'💾 #backup_success\n➖➖➖➖➖➖➖➖➖\n✅ *Бэкап успешно создан*\n🌊 *Remnawave:* '"${REMNAWAVE_VERSION}"$'\n📅 *Дата:* '"${DATE}"
 
