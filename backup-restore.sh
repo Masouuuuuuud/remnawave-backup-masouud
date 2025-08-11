@@ -92,7 +92,7 @@ setup_symlink() {
 }
 
 install_dependencies() {
-    print_message "INFO" "Проверка и установка необходимых пакетов..."
+    print_message "INFO" "Checking and installing required packages..."
     echo ""
 
     if [[ $EUID -ne 0 ]]; then
