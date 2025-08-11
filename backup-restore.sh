@@ -241,38 +241,38 @@ load_or_create_config() {
                 fi
             fi
             echo
-                    echo "    📁 Чтобы указать папку Google Drive:"
-                    echo "    1. Создайте и откройте нужную папку в браузере."
-                    echo "    2. Посмотрите на ссылку в адресной строке,она выглядит так:"
+                    echo "    📁 To specify a Google Drive folder:"
+                    echo "    1. Create and open the desired folder in your browser."
+                    echo "    2. Look at the link in the address bar, it looks like this:"
                     echo "      https://drive.google.com/drive/folders/1a2B3cD4eFmNOPqRstuVwxYz"
-                    echo "    3. Скопируйте часть после /folders/ — это и есть Folder ID:"
-                    echo "    4. Если оставить поле пустым — бекап будет отправлен в корневую папку Google Drive."
+                    echo "    3. Copy the part after /folders/ - this is the Folder ID:"
+                    echo "    4. If you leave the field empty, the backup will be sent to the root folder of Google Drive."
                     echo
 
-                    read -rp "    Введите Google Drive Folder ID (оставьте пустым для корневой папки): " GD_FOLDER_ID
+                    read -rp "    Enter Google Drive Folder ID (leave blank for root folder)): " GD_FOLDER_ID
             config_updated=true
             echo ""
         fi
 
         if $config_updated; then
             save_config
-            print_message "SUCCESS" "Конфигурация дополнена и сохранена в ${BOLD}${CONFIG_FILE}${RESET}"
+            print_message "SUCCESS" "The configuration has been completed and saved in ${BOLD}${CONFIG_FILE}${RESET}"
         else
-            print_message "SUCCESS" "Конфигурация успешно загружена из ${BOLD}${CONFIG_FILE}${RESET}."
+            print_message "SUCCESS" "Configuration successfully loaded from ${BOLD}${CONFIG_FILE}${RESET}."
         fi
 
     else
         if [[ "$SCRIPT_RUN_PATH" != "$SCRIPT_PATH" ]]; then
-            print_message "INFO" "Конфигурация не найдена. Скрипт запущен из временного расположения."
-            print_message "INFO" "Перемещаем скрипт в основной каталог установки: ${BOLD}${SCRIPT_PATH}${RESET}..."
-            mkdir -p "$INSTALL_DIR" || { print_message "ERROR" "Не удалось создать каталог установки ${BOLD}${INSTALL_DIR}${RESET}. Проверьте права доступа."; exit 1; }
-            mkdir -p "$BACKUP_DIR" || { print_message "ERROR" "Не удалось создать каталог для бэкапов ${BOLD}${BACKUP_DIR}${RESET}. Проверьте права доступа."; exit 1; }
+            print_message "INFO" "Configuration not found. Script running from temporary location."
+            print_message "INFO" "Move the script to the main installation directory: ${BOLD}${SCRIPT_PATH}${RESET}..."
+            mkdir -p "$INSTALL_DIR" || { print_message "ERROR" "Failed to create installation directory ${BOLD}${INSTALL_DIR}${RESET}. Check permissions."; exit 1; }
+            mkdir -p "$BACKUP_DIR" || { print_message "ERROR" "Failed to create backup directory ${BOLD}${BACKUP_DIR}${RESET}. Check permissions."; exit 1; }
 
             if mv "$SCRIPT_RUN_PATH" "$SCRIPT_PATH"; then
                 chmod +x "$SCRIPT_PATH"
                 clear
-                print_message "SUCCESS" "Скрипт успешно перемещен в ${BOLD}${SCRIPT_PATH}${RESET}."
-                print_message "ACTION" "Перезапускаем скрипт из нового расположения для завершения настройки."
+                print_message "SUCCESS" "The script has been successfully moved to ${BOLD}${SCRIPT_PATH}${RESET}."
+                print_message "ACTION" "Restarting the script from the new location to complete the setup."
                 exec "$SCRIPT_PATH" "$@"
                 exit 0
             else
@@ -663,15 +663,15 @@ setup_auto_send() {
         echo -e "${GREEN}${BOLD}Настройка автоматической отправки${RESET}"
         echo ""
         if [[ -n "$CRON_TIMES" ]]; then
-            print_message "INFO" "Автоматическая отправка настроена на: ${BOLD}${CRON_TIMES}${RESET} по UTC+0."
+            print_message "INFO" "Automatic sending is set to: ${BOLD}${CRON_TIMES}${RESET} по UTC+0."
         else
             print_message "INFO" "Автоматическая отправка ${BOLD}выключена${RESET}."
         fi
         echo ""
-        echo "   1. Включить/перезаписать автоматическую отправку бэкапов"
-        echo "   2. Выключить автоматическую отправку бэкапов"
+        echo "   1. Enable/override automatic sending of backups"
+        echo "   2. Disable automatic sending of backups"
         echo ""
-        echo "   0. Вернуться в главное меню"
+        echo "   0. Return to main menu"
         echo ""
         read -rp "${GREEN}[?]${RESET} Выберите пункт: " choice
         echo ""
