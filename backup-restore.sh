@@ -293,7 +293,7 @@ load_or_create_config() {
             echo -e "       Оставьте пустым для общего потока или отправки напрямую в бота"
             read -rp "    Введите Message Thread ID: " TG_MESSAGE_THREAD_ID
             echo ""
-            read -rp "    Введите имя пользователя PostgreSQL (по умолчанию postgres): " DB_USER
+            read -rp "    Введите PostgreSQL username (по умолчанию postgres): " DB_USER
             DB_USER=${DB_USER:-postgres}
             echo ""
 
@@ -599,7 +599,7 @@ create_backup() {
             if send_telegram_document "$BACKUP_DIR/$BACKUP_FILE_FINAL" "$caption_text"; then
                 print_message "SUCCESS" "Бэкап успешно отправлен в Telegram."
             else
-                echo -e "${RED}❌ Ошибка при отправке бэкапа в Telegram. Проверьте настройки Telegram API (токен, ID чата).${RESET}"
+                echo -e "${RED}❌ Ошибка при отправке бэкапа в Telegram. Проверьте Settings Telegram API (токен, ID чата).${RESET}"
             fi
         elif [[ "$UPLOAD_METHOD" == "google_drive" ]]; then
             if send_google_drive_document "$BACKUP_DIR/$BACKUP_FILE_FINAL"; then
@@ -611,7 +611,7 @@ create_backup() {
                     print_message "ERROR" "Не удалось отправить уведомление в Telegram после загрузки на Google Drive."
                 fi
             else
-                echo -e "${RED}❌ Ошибка при отправке бэкапа в Google Drive. Проверьте настройки Google Drive API.${RESET}"
+                echo -e "${RED}❌ Ошибка при отправке бэкапа в Google Drive. Проверьте Settings Google Drive API.${RESET}"
                 send_telegram_message "❌ Ошибка: Не удалось отправить бэкап в Google Drive. Подробности в логах сервера." "None"
             fi
         else
@@ -644,7 +644,7 @@ create_backup() {
             REMOTE_VERSION_LATEST=$(curl -fsSL "$SCRIPT_REPO_URL" 2>/dev/null | grep -m 1 "^VERSION=" | cut -d'"' -f2)
 
             if [[ -n "$REMOTE_VERSION_LATEST" ]]; then
-                local update_msg=$'⚠️ *Доступно обновление скрипта*\n🔄 *Текущая версия:* '"${CURRENT_VERSION}"$'\n🆕 *Актуальная версия:* '"${REMOTE_VERSION_LATEST}"$'\n\n📥 Обновите через пункт *«Обновление скрипта»* в главном меню'
+                local update_msg=$'⚠️ *Доступно обновление скрипта*\n🔄 *Current version:* '"${CURRENT_VERSION}"$'\n🆕 *Актуальная версия:* '"${REMOTE_VERSION_LATEST}"$'\n\n📥 Обновите через пункт *«Обновление скрипта»* в главном меню'
                 send_telegram_message "$update_msg" >/dev/null 2>&1
             fi
         fi
@@ -654,8 +654,8 @@ create_backup() {
 setup_auto_send() {
     echo ""
     if [[ $EUID -ne 0 ]]; then
-        print_message "WARN" "Для настройки cron требуются права root. Пожалуйста, запустите с '${BOLD}sudo'${RESET}.${RESET}"
-        read -rp "Нажмите Enter для продолжения..."
+        print_message "WARN" "Для Settings cron требуются права root. Пожалуйста, запустите с '${BOLD}sudo'${RESET}.${RESET}"
+        read -rp "Press Enter to continue..."
         return
     fi
     while true; do
@@ -788,7 +788,7 @@ setup_auto_send() {
             *) print_message "ERROR" "Неверный ввод. Пожалуйста, выберите один из предложенных пунктов." ;;
         esac
         echo ""
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
     done
     echo ""
 }
@@ -999,27 +999,27 @@ restore_backup() {
     local restore_msg=$'💾 #restore_success\n➖➖➖➖➖➖➖➖➖\n✅ *Восстановление БД завершено*\n🌊 *Remnawave:* '"${REMNAWAVE_VERSION}"
     send_telegram_message "$restore_msg" >/dev/null 2>&1
     
-    read -rp "Нажмите Enter для продолжения..."
+    read -rp "Press Enter to continue..."
     return
 }
 
 update_script() {
-    print_message "INFO" "Начинаю процесс проверки обновлений..."
+    print_message "INFO" "Starting the update check process..."
     echo ""
     if [[ "$EUID" -ne 0 ]]; then
         echo -e "${RED}⛔ Для обновления скрипта требуются права root. Пожалуйста, запустите с '${BOLD}sudo'${RESET}.${RESET}"
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     fi
 
-    print_message "INFO" "Получение информации о последней версии скрипта с GitHub..."
+    print_message "INFO" "Getting information about the latest version of a script from GitHub..."
     local TEMP_REMOTE_VERSION_FILE
     TEMP_REMOTE_VERSION_FILE=$(mktemp)
 
     if ! curl -fsSL "$SCRIPT_REPO_URL" 2>/dev/null | head -n 100 > "$TEMP_REMOTE_VERSION_FILE"; then
         print_message "ERROR" "Не удалось загрузить информацию о новой версии с GitHub. Проверьте URL или сетевое соединение."
         rm -f "$TEMP_REMOTE_VERSION_FILE"
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     fi
 
@@ -1028,12 +1028,12 @@ update_script() {
 
     if [[ -z "$REMOTE_VERSION" ]]; then
         print_message "ERROR" "Не удалось извлечь информацию о версии из удаленного скрипта. Возможно, формат переменной VERSION изменился."
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     fi
 
-    print_message "INFO" "Текущая версия: ${BOLD}${YELLOW}${VERSION}${RESET}"
-    print_message "INFO" "Доступная версия: ${BOLD}${GREEN}${REMOTE_VERSION}${RESET}"
+    print_message "INFO" "Current version: ${BOLD}${YELLOW}${VERSION}${RESET}"
+    print_message "INFO" "Available version: ${BOLD}${GREEN}${REMOTE_VERSION}${RESET}"
     echo ""
 
     compare_versions() {
@@ -1073,12 +1073,12 @@ update_script() {
 
         if [[ "${confirm_update,,}" != "y" ]]; then
             print_message "WARN" "Обновление отменено пользователем. Возврат в главное меню."
-            read -rp "Нажмите Enter для продолжения..."
+            read -rp "Press Enter to continue..."
             return
         fi
     else
-        print_message "INFO" "У вас установлена актуальная версия скрипта. Обновление не требуется."
-        read -rp "Нажмите Enter для продолжения..."
+        print_message "INFO" "You have the current version of the script installed. No update required."
+        read -rp "Press Enter to continue..."
         return
     fi
 
@@ -1086,14 +1086,14 @@ update_script() {
     print_message "INFO" "Загрузка обновления..."
     if ! curl -fsSL "$SCRIPT_REPO_URL" -o "$TEMP_SCRIPT_PATH"; then
         print_message "ERROR" "Не удалось загрузить новую версию скрипта."
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     fi
 
     if [[ ! -s "$TEMP_SCRIPT_PATH" ]] || ! head -n 1 "$TEMP_SCRIPT_PATH" | grep -q -e '^#!.*bash'; then
         print_message "ERROR" "Загруженный файл пуст или не является исполняемым bash-скриптом. Обновление невозможно."
         rm -f "$TEMP_SCRIPT_PATH"
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     fi
 
@@ -1106,7 +1106,7 @@ update_script() {
     cp "$SCRIPT_PATH" "$BACKUP_PATH_SCRIPT" || {
         echo -e "${RED}❌ Не удалось создать резервную копию ${BOLD}${SCRIPT_PATH}${RESET}. Обновление отменено.${RESET}"
         rm -f "$TEMP_SCRIPT_PATH"
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     }
     echo ""
@@ -1116,7 +1116,7 @@ update_script() {
         echo -e "${YELLOW}⚠️ Восстановление из резервной копии ${BOLD}${BACKUP_PATH_SCRIPT}${RESET}...${RESET}"
         mv "$BACKUP_PATH_SCRIPT" "$SCRIPT_PATH"
         rm -f "$TEMP_SCRIPT_PATH"
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     }
 
@@ -1142,13 +1142,13 @@ remove_script() {
     
     if [[ "${confirm,,}" != "y" ]]; then
     print_message "WARN" "Удаление отменено."
-    read -rp "Нажмите Enter для продолжения..."
+    read -rp "Press Enter to continue..."
     return
     fi
 
     if [[ "$EUID" -ne 0 ]]; then
         print_message "WARN" "Для полного удаления требуются права root. Пожалуйста, запустите с ${BOLD}sudo${RESET}."
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
         return
     fi
 
@@ -1187,8 +1187,8 @@ configure_upload_method() {
         echo ""
         print_message "INFO" "Текущий способ: ${BOLD}${UPLOAD_METHOD^^}${RESET}"
         echo ""
-        echo "   1. Установить способ отправки: Telegram"
-        echo "   2. Установить способ отправки: Google Drive"
+        echo "   1. Set sending method: Telegram"
+        echo "   2. Set sending method: Google Drive"
         echo ""
         echo "   0. Вернуться в главное меню"
         echo ""
@@ -1209,7 +1209,7 @@ configure_upload_method() {
                     print_message "INFO" "Свой ID можно узнать у этого бота в Telegram ${CYAN}@userinfobot${RESET}"
                     read -rp "   Введите свой Telegram ID: " CHAT_ID
                     save_config
-                    print_message "SUCCESS" "Настройки Telegram сохранены."
+                    print_message "SUCCESS" "Settings Telegram сохранены."
                 fi
                 ;;
             2)
@@ -1273,7 +1273,7 @@ configure_upload_method() {
                 save_config
 
                 if $gd_setup_successful; then
-                    print_message "SUCCESS" "Настройки Google Drive сохранены."
+                    print_message "SUCCESS" "Settings Google Drive сохранены."
                 else
                     print_message "SUCCESS" "Способ отправки установлен на ${BOLD}Telegram${RESET}."
                 fi
@@ -1282,7 +1282,7 @@ configure_upload_method() {
             *) print_message "ERROR" "Неверный ввод. Пожалуйста, выберите один из предложенных пунктов." ;;
         esac
         echo ""
-        read -rp "Нажмите Enter для продолжения..."
+        read -rp "Press Enter to continue..."
     done
     echo ""
 }
@@ -1292,12 +1292,12 @@ configure_settings() {
         clear
         echo -e "${GREEN}${BOLD}Изменение конфигурации скрипта${RESET}"
         echo ""
-        echo "   1. Настройки Telegram"
-        echo "   2. Настройки Google Drive"
-        echo "   3. Имя пользователя PostgreSQL"
-        echo "   4. Путь Remnawave"
+        echo "   1. Settings Telegram"
+        echo "   2. Settings Google Drive"
+        echo "   3. PostgreSQL username"
+        echo "   4. Path Remnawave"
         echo ""
-        echo "   0. Вернуться в главное меню"
+        echo "   0. Return to main menu"
         echo ""
         read -rp "${GREEN}[?]${RESET} Выберите пункт: " choice
         echo ""
@@ -1306,7 +1306,7 @@ configure_settings() {
             1)
                 while true; do
                     clear
-                    echo -e "${GREEN}${BOLD}Настройки Telegram${RESET}"
+                    echo -e "${GREEN}${BOLD}Settings Telegram${RESET}"
                     echo ""
                     print_message "INFO" "Текущий API Token: ${BOLD}${BOT_TOKEN}${RESET}"
                     print_message "INFO" "Текущий ID: ${BOLD}${CHAT_ID}${RESET}"
@@ -1349,14 +1349,14 @@ configure_settings() {
                         *) print_message "ERROR" "Неверный ввод. Пожалуйста, выберите один из предложенных пунктов." ;;
                     esac
                     echo ""
-                    read -rp "Нажмите Enter для продолжения..."
+                    read -rp "Press Enter to continue..."
                 done
                 ;;
 
             2)
                 while true; do
                     clear
-                    echo -e "${GREEN}${BOLD}Настройки Google Drive${RESET}"
+                    echo -e "${GREEN}${BOLD}Settings Google Drive${RESET}"
                     echo ""
                     print_message "INFO" "Текущий Client ID: ${BOLD}${GD_CLIENT_ID:0:8}...${RESET}"
                     print_message "INFO" "Текущий Client Secret: ${BOLD}${GD_CLIENT_SECRET:0:8}...${RESET}"
@@ -1439,21 +1439,21 @@ configure_settings() {
                         *) print_message "ERROR" "Неверный ввод. Пожалуйста, выберите один из предложенных пунктов." ;;
                     esac
                     echo ""
-                    read -rp "Нажмите Enter для продолжения..."
+                    read -rp "Press Enter to continue..."
                 done
                 ;;
             3)
                 clear
-                echo -e "${GREEN}${BOLD}Имя пользователя PostgreSQL${RESET}"
+                echo -e "${GREEN}${BOLD}PostgreSQL username${RESET}"
                 echo ""
-                print_message "INFO" "Текущее имя пользователя PostgreSQL: ${BOLD}${DB_USER}${RESET}"
+                print_message "INFO" "Current PostgreSQL username: ${BOLD}${DB_USER}${RESET}"
                 echo ""
-                read -rp "   Введите новое имя пользователя PostgreSQL (по умолчанию postgres): " NEW_DB_USER
+                read -rp "   Введите новое PostgreSQL username (по умолчанию postgres): " NEW_DB_USER
                 DB_USER="${NEW_DB_USER:-postgres}"
                 save_config
-                print_message "SUCCESS" "Имя пользователя PostgreSQL успешно обновлено на ${BOLD}${DB_USER}${RESET}."
+                print_message "SUCCESS" "PostgreSQL username успешно обновлено на ${BOLD}${DB_USER}${RESET}."
                 echo ""
-                read -rp "Нажмите Enter для продолжения..."
+                read -rp "Press Enter to continue..."
                 ;;
             4)
                 clear
@@ -1479,7 +1479,7 @@ configure_settings() {
                 save_config
                 print_message "SUCCESS" "Путь Remnawave успешно обновлен на ${BOLD}${REMNALABS_ROOT_DIR}${RESET}."
                 echo ""
-                read -rp "Нажмите Enter для продолжения..."
+                read -rp "Press Enter to continue..."
                 ;;
             0) break ;;
             *) print_message "ERROR" "Неверный ввод. Пожалуйста, выберите один из предложенных пунктов." ;;
